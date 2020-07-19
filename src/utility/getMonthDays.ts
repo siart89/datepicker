@@ -2,11 +2,11 @@ import { DayInfo } from "../models";
 
 export const getMonthDays = (currentDate: Date): DayInfo[][] => {
   const date = new Date(currentDate);
-  const nextMonth = new Date(date.setMonth(date.getMonth() + 1));
-  const lastDayOfMonth = new Date(nextMonth.setDate(0)).getDate();
+  const nextMonth = new Date(new Date(date).setMonth(date.getMonth() + 1));
+  const lastDayOfMonth = new Date(new Date(nextMonth).setDate(0)).getDate();
 
-  const prevMonth = new Date(date.setMonth(date.getMonth() - 1))
-  const prevMonthLastDay = new Date(prevMonth.setDate(0)).getDate();
+  const prevMonth = new Date(new Date(date).setMonth(date.getMonth() - 1))
+  const prevMonthLastDay = new Date(new Date(prevMonth).setDate(0)).getDate();
   const daysArr: DayInfo[][] = [];
   let tmpDaysArr: DayInfo[] = [];
 
@@ -21,7 +21,8 @@ export const getMonthDays = (currentDate: Date): DayInfo[][] => {
         tmpDaysArr.push({
           date: daysShift,
           dayOfWeek: getDayOfWeek(prevMonth, daysShift),
-          isCurrentMonth: false
+          isCurrentMonth: false,
+          fullDate: new Date(new Date(prevMonth).setDate(daysShift))
         });
         ++daysShift
       }
@@ -30,7 +31,8 @@ export const getMonthDays = (currentDate: Date): DayInfo[][] => {
     tmpDaysArr.push({
       date: i,
       dayOfWeek: weekDay,
-      isCurrentMonth: true
+      isCurrentMonth: true,
+      fullDate: new Date(date.setDate(i))
     });
 
     if (i === lastDayOfMonth && weekDay !== 7) {
@@ -38,10 +40,12 @@ export const getMonthDays = (currentDate: Date): DayInfo[][] => {
       let nextWeekDay = weekDay + 1;
       while (nextWeekDay <= 7) {
         tmpDaysArr.push({
-          date: nextDay++,
+          date: nextDay,
           dayOfWeek: nextWeekDay++,
-          isCurrentMonth: false
+          isCurrentMonth: false,
+          fullDate: new Date(new Date(nextMonth).setDate(nextDay))
         })
+        ++nextDay
       }
       weekDay = 7;
     };
@@ -55,7 +59,7 @@ export const getMonthDays = (currentDate: Date): DayInfo[][] => {
 }
 
 function getDayOfWeek(date: Date, day: number): number {
-  const tmpWeekday = new Date(date.setDate(day)).getDay();
+  const tmpWeekday = new Date(new Date(date).setDate(day)).getDay();
   if (tmpWeekday === 0) return 7;
   return tmpWeekday;
 }

@@ -1,59 +1,51 @@
 import React from 'react';
 import styled from 'styled-components';
-import WeekDays from './WeekDays';
-import { getMonthDays } from '../utility/getMonthDays';
-import WeekDates from './WeekDates';
+
+import Calendar from './Calendar';
 
 type Props = {
-  date: Date;
+  monthShow: number;
+  selectedDate: Date;
+  setNewDate: (date: Date) => void 
 };
 
 const DatePicker: React.FC<Props> = (props) => {
 
-  const daysOfMonth = React.useMemo(() => {
-    return getMonthDays(props.date)
-  }, [props.date])
+  const datesForCalendar = React.useMemo(() => {
+    const dateNow = new Date();
+    const result: Date[] = [];
+    result.push(dateNow);
+
+    for (let i = 1; i < props.monthShow; i++) {
+      const nextDate = new Date(new Date().setMonth(dateNow.getMonth() + i));
+      result.push(nextDate);
+    }
+    return result;
+  }, [props.monthShow]);
 
   return (
     <StyledWrapper>
-      <WeekDays
-        dayLength={1}
-        className="inner-sections"
-      />
-      {daysOfMonth.map((dayItem, idx) => (
-        <WeekDates
-          key={idx}
-          weekDates={dayItem}
-          className="inner-sections"
-        />
-      ))
+      {datesForCalendar.map((date, idx) => {
+        return (
+          <Calendar
+            key={idx}
+            date={date}
+            selectedDate={props.selectedDate}
+            setNewDate={props.setNewDate}
+          />
+        )
+      })
       }
     </StyledWrapper>
   )
 };
 
 const StyledWrapper = styled.div`
-  max-width: 330px;
-  border: 1px solid gray;
-  border-right: none;
-  border-bottom: none;
-
-  & > div.inner-sections {
-    display: grid;
-    grid-template-columns: repeat(7, 1fr);
-    width: 100%;
-    /* border: 1px solid gray;
-    border-right: none; */
-
-    & > div {
-      border-right:  1px solid gray;
-      border-bottom:  1px solid gray;
-      display: flex;
-      justify-content: center;
-      align-items: center;      
-      height: 30px;
-    }
-  }
+  cursor: pointer;
+  user-select: none;
+  display: flex;
+  justify-content: space-between;
+  padding: 12px 32px 24px;
 `;
 
 export default DatePicker;

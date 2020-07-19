@@ -31,7 +31,13 @@ const WeekDays: React.FC<Props> = (props) => {
 };
 
 const WeekDaysWrapper = styled.div`
-
+  height: 24px;
+  font-family: sans-serif;
+  font-weight: 450;
+  font-size: 14px;
+  letter-spacing: 0px;
+  line-height: 20px;
+  color: rgba(0, 0, 0, 0.54);
 `;
 
 export default WeekDays;
