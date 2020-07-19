@@ -44,7 +44,7 @@ const DatePicker: React.FC<Props> = (props) => {
 
     const prevMonthYear = prevMonth.getFullYear();
     const prevMonthNumber = prevMonth.getMonth();
-    if ((currentYear < prevMonthYear)
+    if ((currentYear > prevMonthYear)
       || (currentYear === prevMonthYear && currentMonthNumber > prevMonthNumber)) {
       return setState(new Date())
     }
@@ -65,11 +65,19 @@ const DatePicker: React.FC<Props> = (props) => {
         )
       })
       }
-      <button onClick={nextButtonHandler}>
-        Next
+      <button
+        onClick={nextButtonHandler}
+        type="button"
+        className="date-picker__nav-button date-picker__nav-button--next"
+      >
+        {'\>'}
       </button>
-      <button onClick={prevButtonHandler}>
-        Prev
+      <button
+        onClick={prevButtonHandler}
+        type="button"
+        className="date-picker__nav-button date-picker__nav-button--prev"
+      >
+        {'\<'}
       </button>
     </StyledWrapper>
   )
@@ -81,6 +89,29 @@ const StyledWrapper = styled.div`
   display: flex;
   justify-content: space-between;
   padding: 12px 32px 24px;
+  position: relative;
+
+.date-picker {
+  &__nav-button {
+    width: 36px;
+    height: 36px;
+    background-color: rgb(255, 255, 255);
+    box-shadow: 0px 2px 6px 0px rgba(0, 0, 0, 0.12);
+    border-radius: 100%;
+    cursor: pointer;
+    position: absolute;
+    border: none;
+
+    &--next {
+      top: 130px;
+      right: -10px;
+    }
+    &--prev {
+      top: 130px;
+      left: -10px;
+    }
+  }
+}
 `;
 
 export default DatePicker;
