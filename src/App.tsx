@@ -1,6 +1,7 @@
 import React from 'react';
 import DatePicker from './components/DatePicker';
 import styled from 'styled-components';
+import Scroller from './Scroller';
 
 
 function App() {
@@ -16,13 +17,14 @@ function App() {
 
   return (
     <div className="App">
-      <StyledPicker>
+      {/* <StyledPicker>
         <DatePicker
           monthShow={2}
           selectedDate={state}
           setNewDate={setNewDate}
         />
-      </StyledPicker>
+      </StyledPicker> */}
+      <Scroller />
     </div>
   );
 }
