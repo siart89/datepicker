@@ -5,6 +5,7 @@ const arr = Array(10).fill(1);
 
 const Scroller: React.FC = () => {
   const scrollerRef = React.useRef<HTMLDivElement>(null);
+  const [state, setState] = React.useState<number | null>(null);
 
   React.useEffect(() => {
     const elem = scrollerRef.current;
@@ -22,12 +23,20 @@ const Scroller: React.FC = () => {
         }
         
       } else {
+        console.log('inside normal')
         const top = height - window.innerHeight;
-        elem.style.top = `-${top}px`;
+        console.log(top)
+        if (top > 0) {
+          elem.style.top = `-${top}px`;
+        }
         elem.style.maxHeight = `${document.body.scrollHeight - 202}px`
       }
     }
-  }, [])
+  }, [state]);
+
+  const onClickHandler = (idx: number) => {
+    setState(idx)
+  }
 
   return (
     <StyledWrapper>
@@ -86,9 +95,13 @@ const Scroller: React.FC = () => {
         {
           arr.map((_, idx) => {
             return (
-              <p key={idx}>
+              <p key={idx} onClick={() => onClickHandler(idx)}>
                 Lorem ipsum dolor sit amet consectetur adipisicing elit. Numquam quos pariatur
-                doloribus minima quam modi earum! Perferendis asperiores nam possimus deleniti maiores hic veritatis odio, ex quis eos accusamus esse beatae suscipit aliquam facere deserunt et magnam repudiandae? Consectetur, dolores.
+                {(state === idx) &&
+                  <span>
+                    doloribus minima quam modi earum! Perferendis asperiores nam possimus deleniti maiores hic veritatis odio, ex quis eos accusamus esse beatae suscipit aliquam facere deserunt et magnam repudiandae? Consectetur, dolores.
+                  </span>
+                }
               </p>
             )
           })
@@ -130,8 +143,9 @@ const StyledWrapper = styled.div`
         }
 
         & > p {
-          padding: 0;
+          padding: 25px 0;
           margin: 0;
+          cursor: pointer;
         }
 
         &--sticky_active {
