@@ -1,26 +1,27 @@
 import React from 'react';
 import styled from 'styled-components';
 
-const arr = Array(10).fill(1);
+const arr = Array(5).fill(1);
 
 const Scroller: React.FC = () => {
   const scrollerRef = React.useRef<HTMLDivElement>(null);
   const [state, setState] = React.useState<number | null>(null);
 
   React.useEffect(() => {
+    const topShiftFromProps = 200;
     const elem = scrollerRef.current;
+    const viewHeight = window.innerHeight;
+    const fullHeight = document.body.scrollHeight;
+
     if (elem) {
       const height = elem.scrollHeight;
-      if (height > document.body.scrollHeight) {
-        console.log('height > document.body.scrollHeigh')
-
-        const shift = height - document.body.scrollHeight;
+      if (height > fullHeight) {
+        const shift = height - fullHeight;
         const topOffset = parseInt(getComputedStyle(elem).top);
-        elem.style.top = (document.body.scrollHeight - window.innerHeight) === 0 ? `${topOffset}px` : `${topOffset - shift}`
+        elem.style.top = (document.body.scrollHeight - window.innerHeight) === 0 ? `${topOffset}px` : `${topOffset - shift}px`
         if (document.body.scrollHeight - window.innerHeight > 0) {
-          console.log('get')
           elem.style.maxHeight = `${document.body.scrollHeight}px`
-        }
+        } 
         
       } else {
         console.log('inside normal')
@@ -29,6 +30,7 @@ const Scroller: React.FC = () => {
         if (top > 0) {
           elem.style.top = `-${top}px`;
         }
+        elem.style.top = `${topShiftFromProps}px`
         elem.style.maxHeight = `${document.body.scrollHeight - 202}px`
       }
     }
@@ -134,7 +136,7 @@ const StyledWrapper = styled.div`
         width: calc(40% - 20px);
         border: 1px solid tomato;
         max-height: calc(100vh - 218px);
-        top: 200px;
+        top: 0;
         ::-webkit-scrollbar {
           display: none;
         }
